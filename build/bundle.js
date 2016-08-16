@@ -87,7 +87,7 @@
 	  return App;
 	}(_react.Component);
 	
-	_reactDom2.default.render(_react2.default.createElement(App, null), document, getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
