@@ -3,11 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
+  <style>
+  *{
+  }
+div div *{
+  border:1px solid grey;
+  border-radius: 3px;
+  margin:0.5rem;
+  padding:0.5rem;
+  background-color: rgba(20,0,50,0.05);
+  width:calc(100% - 16px);
+  box-sizing: border-box;
+
+}
+li, input, textarea{
+  list-style: none;
+  background-color: white;
+
+}
+  </style>
 </head>
 <body style="background:#f9f9f9;">
-  <div id="app">
+  <div id="app"></div>
 
-  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDKRoXmDNrhQ0pFFMvnQ9E5a2qu4YsImHw",
+      authDomain: "rchatroom.firebaseapp.com",
+      databaseURL: "https://rchatroom.firebaseio.com",
+      storageBucket: "rchatroom.appspot.com",
+    };
+    firebase.initializeApp(config);
+  </script>
+      
+
   <script type="text/javascript" src="build/bundle.js"></script>
 </body>
 </html>

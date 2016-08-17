@@ -12,20 +12,57 @@ constructor(props, context){
     thread: [],
   }
 }
+componentDidMount(){
+  var _this = this
+  var thread=[]
+  console.log('ComponentDidMount');
+  firebase.database().ref('messages/').on( 'value',
+    (snapshot)=>{
+      var currentThread = snapshot.val()
+      console.log('componentDidMount-currentThread:'+currentThread )
+
+      console.dir(currentThread);
+      console.table(currentThread);
+      var timestamps = Object.keys(currentThread).sort();
+      console.log("timestamps");
+      console.dir(timestamps);
+timestamps.map(
+  (timestamp)=>{
+    thread.push(currentThread[timestamp])
+  }
+);
+console.dir(thread);
+      // timestamps.sort()
+      // for(var i =0; i<timestamps.length;i++){
+      //   var timestamp = timestamp[i]
+      //   var pkg = currentThread[timestamp]
+      //   thread.push(pkg)
+      // }
+      this.setState({
+        thread: thread
+      })
+
+    }//end
+  )
+}
 
 submit(event){
   var pkg ={
   username: this.state.username,
   message: this.state.message,
+  id: Math.floor( Date.now()/1000 )
 
   }
-  console.log('state.name: ' +JSON.stringify(pkg))
-  var thread = Object.assign([], this.state.thread)
-  thread.push(pkg)
-  this.setState({
-    thread: thread
-  })
+  // submit to Fb
+  firebase.database().ref('messages/'+pkg.id).set(pkg)
+  console.log('pkg: ' +JSON.stringify(pkg))
+  // var thread = Object.assign([], this.state.thread)
+  // thread.push(pkg)
+  // this.setState({
+  //   thread: thread
+  // })
   console.log('state: ' +JSON.stringify(this.state))
+  console.table(this.state.thread)
   // console.dir(this.state)
 }
 

@@ -21529,34 +21529,71 @@
 	  function ChatRoom(props, context) {
 	    _classCallCheck(this, ChatRoom);
 	
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ChatRoom).call(this, props, context));
+	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(ChatRoom).call(this, props, context));
 	
-	    _this.submit = _this.submit.bind(_this);
-	    _this.updateUsername = _this.updateUsername.bind(_this);
-	    _this.updateMessage = _this.updateMessage.bind(_this);
-	    _this.state = {
+	    _this2.submit = _this2.submit.bind(_this2);
+	    _this2.updateUsername = _this2.updateUsername.bind(_this2);
+	    _this2.updateMessage = _this2.updateMessage.bind(_this2);
+	    _this2.state = {
 	      username: '',
 	      message: '',
 	      thread: []
 	    };
-	    return _this;
+	    return _this2;
 	  }
 	
 	  _createClass(ChatRoom, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this3 = this;
+	
+	      var _this = this;
+	      var thread = [];
+	      console.log('ComponentDidMount');
+	      firebase.database().ref('messages/').on('value', function (snapshot) {
+	        var currentThread = snapshot.val();
+	        console.log('componentDidMount-currentThread:' + currentThread);
+	
+	        console.dir(currentThread);
+	        console.table(currentThread);
+	        var timestamps = Object.keys(currentThread).sort();
+	        console.log("timestamps");
+	        console.dir(timestamps);
+	        timestamps.map(function (timestamp) {
+	          thread.push(currentThread[timestamp]);
+	        });
+	        console.dir(thread);
+	        // timestamps.sort()
+	        // for(var i =0; i<timestamps.length;i++){
+	        //   var timestamp = timestamp[i]
+	        //   var pkg = currentThread[timestamp]
+	        //   thread.push(pkg)
+	        // }
+	        _this3.setState({
+	          thread: thread
+	        });
+	      } //end
+	      );
+	    }
+	  }, {
 	    key: 'submit',
 	    value: function submit(event) {
 	      var pkg = {
 	        username: this.state.username,
-	        message: this.state.message
+	        message: this.state.message,
+	        id: Math.floor(Date.now() / 1000)
 	
 	      };
-	      console.log('state.name: ' + JSON.stringify(pkg));
-	      var thread = Object.assign([], this.state.thread);
-	      thread.push(pkg);
-	      this.setState({
-	        thread: thread
-	      });
+	      // submit to Fb
+	      firebase.database().ref('messages/' + pkg.id).set(pkg);
+	      console.log('pkg: ' + JSON.stringify(pkg));
+	      // var thread = Object.assign([], this.state.thread)
+	      // thread.push(pkg)
+	      // this.setState({
+	      //   thread: thread
+	      // })
 	      console.log('state: ' + JSON.stringify(this.state));
+	      console.table(this.state.thread);
 	      // console.dir(this.state)
 	    }
 	  }, {
